@@ -1,21 +1,24 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <button @click="change">内部改变文本</button>
+    <input type="text" v-model="searchStr">
+    <button type="button" @click="search">搜索</button>
   </div>
 </template>
 
 <script>
 export default {
   name: 'HelloWorld',
+  props: {
+    msg: String
+  },
   data(){
-    return{
-      msg:"hello world"
+    return {
+      searchStr:"",
     }
   },
   methods:{
-    change(){
-      this.msg="change world";
+    search(){
+      this.$emit("searchval",this.searchStr);
     }
   }
 }
