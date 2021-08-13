@@ -1,41 +1,58 @@
 <template>
-  <div class="home">
+  <div>
     <router-link to="/about">关于</router-link>
-    <div v-if="show" id="content">测试文本</div>
-    <button @click="imgClick">按钮</button>
+    <Pagination :pageNum="params.pageNum" :pageTotal="params.pageTotal" @changePage="changePage" @pre="pre" @next="next">
+    </Pagination>
   </div>
 </template>
 
 <script>
-  import HelloWorld from "@/components/HelloWorld.vue"
+  import Pagination from "@/components/Pagination.vue"
   export default {
     name: 'About',
     components: {
-      HelloWorld
-    },
-    created() {
-      console.log("home组件创建");
-    },
-    destroyed() {
-      console.log("home组件销毁");
-    },
-    activated(){
-      console.log("home组件activated");
-    },
-    deactivated(){
-      console.log("home组件deactivated");
+      Pagination
     },
     data(){
       return{
-        show:false,
+        params:{
+          pageNum:1, //当前页
+          pageSize:10, //条数
+        },
+        list:[], //后台返回列表
+        pageTotal:0, //后台返回总页数
+        pageRow:0,  //后台返回总条数
       }
     },
+    created() {
+      this.getData();
+    },
     methods:{
-      imgClick(){
-        this.show=true;
-        let content=document.getElementById("content").innerHTML;
-        console.log(content); //null 取不到
+      getData(){
+        console.log(this.params.pageNum)
+        var that=this;
+        that.list=[{name:"文本",age:15},{name:"wenzi2",age:14}];
+        that.pageTotal=10;
+        that.pageRow=100;
+      },
+      changePage(i){
+        this.params.pageNum=i;
+        this.getData();
+      },
+      pre(){
+        if(this.params.pageNum>1){
+          --this.params.pageNum;
+          this.getData();
+        }
+      },
+      next(){
+        if(this.params.pageNum<this.pageTotal){
+          ++this.params.pageNum;
+          this.getData();
+        }
       }
     }
   }
 </script>
+<style>
+</style>
